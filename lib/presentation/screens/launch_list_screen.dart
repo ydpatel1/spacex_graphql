@@ -6,7 +6,6 @@ import 'package:spacex_graphql/data/models/launch_filter_model.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_bloc.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_event.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_state.dart';
-import 'package:spacex_graphql/presentation/widgets/error_view.dart';
 import 'package:spacex_graphql/presentation/widgets/launch_card.dart';
 import 'package:spacex_graphql/presentation/widgets/loading_view.dart';
 import 'package:spacex_graphql/presentation/screens/launch_details_screen.dart';
