@@ -1,7 +1,19 @@
 class LaunchQueries {
   static const String getLaunches = '''
-    query LaunchesPast(\$limit: Int, \$offset: Int, \$order: String, \$sort: String) {
-      launchesPast(limit: \$limit, offset: \$offset, order: \$order, sort: \$sort) {
+    query LaunchesPast(
+      \$find: LaunchFind,
+      \$limit: Int, 
+      \$offset: Int, 
+      \$order: String, 
+      \$sort: String
+    ) {
+      launchesPast(
+        find: \$find,
+        limit: \$limit, 
+        offset: \$offset, 
+        order: \$order, 
+        sort: \$sort
+      ) {
         details
         id
         is_tentative
@@ -157,6 +169,81 @@ class LaunchQueries {
         }
         tentative_max_precision
         upcoming
+      }
+    }
+  ''';
+
+  static const String getRockets = '''
+    query Rockets(\$limit: Int, \$offset: Int) {
+      rockets(limit: \$limit, offset: \$offset) {
+        id
+        name
+        type
+        description
+        active
+        boosters
+        company
+        cost_per_launch
+        country
+        diameter {
+          feet
+          meters
+        }
+        engines {
+          engine_loss_max
+          layout
+          number
+          propellant_1
+          propellant_2
+          thrust_sea_level {
+            kN
+            lbf
+          }
+          thrust_to_weight
+          thrust_vacuum {
+            kN
+            lbf
+          }
+          type
+          version
+        }
+        first_flight
+        first_stage {
+          burn_time_sec
+          engines
+          fuel_amount_tons
+          reusable
+        }
+        height {
+          feet
+          meters
+        }
+        landing_legs {
+          material
+          number
+        }
+        mass {
+          kg
+          lb
+        }
+        payload_weights {
+          id
+          kg
+          lb
+          name
+        }
+        second_stage {
+          burn_time_sec
+          engines
+          fuel_amount_tons
+          thrust {
+            kN
+            lbf
+          }
+        }
+        stages
+        success_rate_pct
+        wikipedia
       }
     }
   ''';

@@ -2,10 +2,11 @@ import 'package:equatable/equatable.dart';
 import '../../../data/models/launch_model.dart';
 
 abstract class LaunchState extends Equatable {
-  const LaunchState();
+  final List<LaunchModel>? launches;
+  const LaunchState({this.launches});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [launches];
 }
 
 class LaunchInitial extends LaunchState {}
@@ -13,12 +14,24 @@ class LaunchInitial extends LaunchState {}
 class LaunchLoading extends LaunchState {}
 
 class LaunchLoaded extends LaunchState {
-  final List<LaunchModel> launches;
-
-  const LaunchLoaded(this.launches);
+  const LaunchLoaded({super.launches});
 
   @override
-  List<Object> get props => [launches];
+  List<Object?> get props => [launches];
+}
+
+class LaunchLoadedWithLoading extends LaunchState {
+  const LaunchLoadedWithLoading({super.launches});
+
+  @override
+  List<Object?> get props => [launches];  
+}
+
+class LaunchRefreshingLoding extends LaunchState {
+  const LaunchRefreshingLoding({super.launches});
+
+  @override
+  List<Object?> get props => [launches];
 }
 
 class LaunchDetailLoaded extends LaunchState {

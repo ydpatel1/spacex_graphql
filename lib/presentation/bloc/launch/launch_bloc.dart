@@ -4,10 +4,9 @@ import 'launch_event.dart';
 import 'launch_state.dart';
 
 class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
-  final LaunchRepository _launchRepository;
-  static const int _pageSize = 10;
+  final LaunchRepository repository;
 
-  LaunchBloc(this._launchRepository) : super(LaunchInitial()) {
+  LaunchBloc(this.repository) : super(LaunchInitial()) {
     on<FetchLaunches>(_onFetchLaunches);
     on<FetchLaunchById>(_onFetchLaunchById);
     on<RefreshLaunches>(_onRefreshLaunches);
@@ -20,23 +19,25 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
     try {
       if (state is LaunchInitial) {
         emit(LaunchLoading());
+      } else {
+        emit(LaunchLoadedWithLoading(launches: state.launches));
       }
 
-      final launches = await _launchRepository.getLaunches(
+      final launches = await repository.getLaunches(
         limit: event.limit,
         offset: event.offset,
         order: event.order,
         sort: event.sort,
+        filter: event.filter,
       );
 
-      if (launches.isEmpty) {
+      if (state is LaunchLoadedWithLoading) {
+        final currentState = state as LaunchLoadedWithLoading;
         emit(LaunchLoaded(
-          launches,
+          launches: [...(currentState.launches ?? []), ...launches],
         ));
       } else {
-        emit(LaunchLoaded(
-          launches,
-        ));
+        emit(LaunchLoaded(launches: launches));
       }
     } catch (e) {
       emit(LaunchError(e.toString()));
@@ -49,7 +50,7 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   ) async {
     try {
       emit(LaunchLoading());
-      final launch = await _launchRepository.getLaunchById(event.id);
+      final launch = await repository.getLaunchById(event.id);
       if (launch != null) {
         emit(LaunchDetailLoaded(launch));
       } else {
@@ -64,15 +65,14 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
     RefreshLaunches event,
     Emitter<LaunchState> emit,
   ) async {
+    emit(LaunchRefreshingLoding(launches: state.launches));
     try {
-      final launches = await _launchRepository.getLaunches(
+      final launches = await repository.getLaunches(
         limit: event.limit,
         offset: event.offset,
+        filter: event.filter,
       );
-
-      emit(LaunchLoaded(
-        launches,
-      ));
+      emit(LaunchLoaded(launches: launches));
     } catch (e) {
       emit(LaunchError(e.toString()));
     }
