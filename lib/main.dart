@@ -7,6 +7,8 @@ import 'domain/repositories/launch_repository.dart';
 import 'presentation/bloc/launch/launch_bloc.dart';
 import 'presentation/bloc/launch_details/launch_details_bloc.dart';
 import 'presentation/screens/launch_list_screen.dart';
+import 'presentation/screens/rocket_catalog_screen.dart';
+import 'presentation/screens/rocket_comparison_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,51 +48,57 @@ class SpaceXApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.system,
-          home: const LaunchListScreen(),
+          home: const HomeScreen(),
         ),
       ),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('SpaceX Explorer'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implement search functionality
-            },
-          ),
-        ],
       ),
-      body: const Center(
-        child: Text('Welcome to SpaceX Explorer'),
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.rocket_launch),
-            label: 'Launches',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.rocket),
-            label: 'Rockets',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.info),
-            label: 'About',
-          ),
-        ],
-        onDestinationSelected: (index) {
-          // TODO: Implement navigation
-        },
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LaunchListScreen()),
+                );
+              },
+              child: const Text('Launch History'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RocketCatalogScreen()),
+                );
+              },
+              child: const Text('Rocket Catalog'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RocketComparisonScreen()),
+                );
+              },
+              child: const Text('Compare Rockets'),
+            ),
+          ],
+        ),
       ),
     );
   }
