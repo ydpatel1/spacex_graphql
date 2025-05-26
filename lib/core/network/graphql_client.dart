@@ -9,6 +9,7 @@ class GraphQLClientConfig {
       final HttpLink httpLink = HttpLink(_baseUrl);
       _client = GraphQLClient(
         link: httpLink,
+        queryRequestTimeout: const Duration(seconds: 60),
         cache: GraphQLCache(),
       );
     }

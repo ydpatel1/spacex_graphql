@@ -18,6 +18,7 @@ class LaunchCard extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -26,17 +27,17 @@ class LaunchCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                launch.missionName ?? 'Unknown Mission',
+                launch.missionName,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                'Launch Date: ${launch.launchDateLocal != null ? dateFormat.format(DateTime.parse(launch.launchDateLocal!)) : 'Unknown'}',
+                'Launch Date: ${launch.launchDateLocal.isNotEmpty ? dateFormat.format(DateTime.parse(launch.launchDateLocal)) : 'Unknown'}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 4),
               Text(
-                'Rocket: ${launch.rocket?.rocketName ?? 'Unknown'}',
+                'Rocket: ${launch.rocket.rocketName}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 4),

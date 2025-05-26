@@ -25,13 +25,18 @@ class LaunchRepositoryImpl implements LaunchRepository {
           order: order,
           sort: sort,
         ),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
 
     if (result.hasException) {
       throw result.exception!;
     }
-    print("result.data: ${result.data}");
+
+    if (result.data == null || !result.data!.containsKey('launchesPast')) {
+      return [];
+    }
+
     return LaunchMapper.fromGraphQLResponse(result.data!);
   }
 

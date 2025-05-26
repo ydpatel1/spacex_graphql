@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import '../../../data/models/launch_model.dart';
 
 abstract class LaunchEvent extends Equatable {
   const LaunchEvent();
@@ -38,7 +37,7 @@ class RefreshLaunches extends LaunchEvent {
   final int limit;
   final int offset;
 
-  RefreshLaunches({
+  const RefreshLaunches({
     required this.limit,
     required this.offset,
   });
