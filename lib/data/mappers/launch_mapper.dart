@@ -1,4 +1,6 @@
 import '../models/launch_model.dart';
+import '../models/launch_filter_model.dart';
+import '../models/request_launch_model.dart';
 
 class LaunchMapper {
   static List<LaunchModel> fromGraphQLResponse(Map<String, dynamic> response) {
@@ -17,13 +19,22 @@ class LaunchMapper {
     int? offset,
     String? order,
     String? sort,
+    LaunchFilter? filter,
   }) {
-    return {
-      'limit': limit,
-      if (offset != null) 'offset': offset,
-      if (order != null) 'order': order,
-      if (sort != null) 'sort': sort,
-    };
+    final requestModel = filter?.toRequestLaunchModel(
+          limit: limit,
+          offset: offset,
+          order: order,
+          sort: sort,
+        ) ??
+        RequestLaunchModel(
+          limit: limit,
+          offset: offset,
+          order: order,
+          sort: sort,
+        );
+
+    return requestModel.toJson();
   }
 
   static Map<String, dynamic> toGraphQLSingleLaunchVariables(String id) {

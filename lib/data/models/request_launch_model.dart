@@ -258,7 +258,7 @@ class LaunchFindModel extends Equatable {
       'landing_vehicle': landingVehicle,
       'launch_date_local': launchDateLocal,
       'launch_date_utc': launchDateUtc,
-      'launch_success': launchSuccess,
+      'launch_success': launchSuccess?.toString(),
       'launch_year': launchYear,
       'legs': legs,
       'lifespan_years': lifespanYears,

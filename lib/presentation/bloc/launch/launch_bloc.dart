@@ -4,9 +4,9 @@ import 'launch_event.dart';
 import 'launch_state.dart';
 
 class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
-  final LaunchRepository _launchRepository;
+  final LaunchRepository repository;
 
-  LaunchBloc(this._launchRepository) : super(LaunchInitial()) {
+  LaunchBloc(this.repository) : super(LaunchInitial()) {
     on<FetchLaunches>(_onFetchLaunches);
     on<FetchLaunchById>(_onFetchLaunchById);
     on<RefreshLaunches>(_onRefreshLaunches);
@@ -23,16 +23,17 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
         emit(LaunchLoadedWithLoading(launches: state.launches));
       }
 
-      final launches = await _launchRepository.getLaunches(
+      final launches = await repository.getLaunches(
         limit: event.limit,
         offset: event.offset,
         order: event.order,
         sort: event.sort,
+        filter: event.filter,
       );
 
       if (state is LaunchLoadedWithLoading) {
         final currentState = state as LaunchLoadedWithLoading;
-          emit(LaunchLoaded(
+        emit(LaunchLoaded(
           launches: [...(currentState.launches ?? []), ...launches],
         ));
       } else {
@@ -49,7 +50,7 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   ) async {
     try {
       emit(LaunchLoading());
-      final launch = await _launchRepository.getLaunchById(event.id);
+      final launch = await repository.getLaunchById(event.id);
       if (launch != null) {
         emit(LaunchDetailLoaded(launch));
       } else {
@@ -66,9 +67,10 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   ) async {
     emit(LaunchRefreshingLoding(launches: state.launches));
     try {
-      final launches = await _launchRepository.getLaunches(
+      final launches = await repository.getLaunches(
         limit: event.limit,
         offset: event.offset,
+        filter: event.filter,
       );
       emit(LaunchLoaded(launches: launches));
     } catch (e) {

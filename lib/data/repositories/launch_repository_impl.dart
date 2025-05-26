@@ -2,6 +2,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../datasources/launch_queries.dart';
 import '../mappers/launch_mapper.dart';
 import '../models/launch_model.dart';
+import '../models/launch_filter_model.dart';
+import '../models/rocket_model.dart';
 import '../../domain/repositories/launch_repository.dart';
 
 class LaunchRepositoryImpl implements LaunchRepository {
@@ -15,6 +17,7 @@ class LaunchRepositoryImpl implements LaunchRepository {
     int? offset,
     String? order,
     String? sort,
+    LaunchFilter? filter,
   }) async {
     final result = await _client.query(
       QueryOptions(
@@ -24,6 +27,7 @@ class LaunchRepositoryImpl implements LaunchRepository {
           offset: offset,
           order: order,
           sort: sort,
+          filter: filter,
         ),
         fetchPolicy: FetchPolicy.networkOnly,
       ),
@@ -54,5 +58,26 @@ class LaunchRepositoryImpl implements LaunchRepository {
     }
 
     return LaunchMapper.fromGraphQLSingleResponse(result.data!);
+  }
+
+  @override
+  Future<List<RocketModel>> getRockets() async {
+    final result = await _client.query(
+      QueryOptions(
+        document: gql(LaunchQueries.getRockets),
+        fetchPolicy: FetchPolicy.networkOnly,
+      ),
+    );
+
+    if (result.hasException) {
+      throw result.exception!;
+    }
+
+    if (result.data == null || !result.data!.containsKey('rockets')) {
+      return [];
+    }
+
+    final List<dynamic> rockets = result.data!['rockets'] as List<dynamic>;
+    return rockets.map((rocket) => RocketModel.fromJson(rocket)).toList();
   }
 }

@@ -1,7 +1,19 @@
 class LaunchQueries {
   static const String getLaunches = '''
-    query LaunchesPast(\$limit: Int, \$offset: Int, \$order: String, \$sort: String) {
-      launchesPast(limit: \$limit, offset: \$offset, order: \$order, sort: \$sort) {
+    query LaunchesPast(
+      \$find: LaunchFind,
+      \$limit: Int, 
+      \$offset: Int, 
+      \$order: String, 
+      \$sort: String
+    ) {
+      launchesPast(
+        find: \$find,
+        limit: \$limit, 
+        offset: \$offset, 
+        order: \$order, 
+        sort: \$sort
+      ) {
         details
         id
         is_tentative
@@ -157,6 +169,16 @@ class LaunchQueries {
         }
         tentative_max_precision
         upcoming
+      }
+    }
+  ''';
+
+  static const String getRockets = '''
+    query Rockets {
+      rockets {
+        id
+        name
+        type
       }
     }
   ''';
