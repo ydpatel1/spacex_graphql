@@ -5,6 +5,7 @@ import 'core/theme/app_theme.dart';
 import 'data/repositories/launch_repository_impl.dart';
 import 'domain/repositories/launch_repository.dart';
 import 'presentation/bloc/launch/launch_bloc.dart';
+import 'presentation/bloc/launch_details/launch_details_bloc.dart';
 import 'presentation/screens/launch_list_screen.dart';
 
 void main() async {
@@ -31,6 +32,11 @@ class SpaceXApp extends StatelessWidget {
         providers: [
           BlocProvider<LaunchBloc>(
             create: (context) => LaunchBloc(
+              context.read<LaunchRepository>(),
+            ),
+          ),
+          BlocProvider<LaunchDetailsBloc>(
+            create: (context) => LaunchDetailsBloc(
               context.read<LaunchRepository>(),
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:spacex_graphql/presentation/bloc/launch/launch_state.dart';
 import 'package:spacex_graphql/presentation/widgets/error_view.dart';
 import 'package:spacex_graphql/presentation/widgets/launch_card.dart';
 import 'package:spacex_graphql/presentation/widgets/loading_view.dart';
+import 'package:spacex_graphql/presentation/screens/launch_details_screen.dart';
 
 class LaunchListScreen extends StatefulWidget {
   const LaunchListScreen({super.key});
@@ -309,7 +310,14 @@ class _LaunchListScreenState extends State<LaunchListScreen> {
                               child: LaunchCard(
                                 launch: launch,
                                 onTap: () {
-                                  // TODO: Navigate to launch details
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => LaunchDetailsScreen(
+                                        launchId: launch.id,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             )
@@ -319,7 +327,14 @@ class _LaunchListScreenState extends State<LaunchListScreen> {
                       return LaunchCard(
                         launch: launch,
                         onTap: () {
-                          // TODO: Navigate to launch details
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LaunchDetailsScreen(
+                                launchId: launch.id,
+                              ),
+                            ),
+                          );
                         },
                       );
                     },

@@ -50,6 +50,7 @@ class LaunchRepositoryImpl implements LaunchRepository {
       QueryOptions(
         document: gql(LaunchQueries.getLaunchById),
         variables: LaunchMapper.toGraphQLSingleLaunchVariables(id),
+        fetchPolicy: FetchPolicy.networkOnly,
       ),
     );
 
