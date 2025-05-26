@@ -27,11 +27,11 @@ class RequestLaunchModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'find': find?.toJson(),
-      'limit': limit,
-      'offset': offset,
-      'order': order,
-      'sort': sort,
+      if (find != null) 'find': find?.toJson(),
+      if (limit != null) 'limit': limit,
+      if (offset != null) 'offset': offset,
+      if (order != null) 'order': order,
+      if (sort != null) 'sort': sort,
     };
   }
 

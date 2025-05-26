@@ -3,12 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex_graphql/data/models/launch_model.dart';
 import 'package:spacex_graphql/data/models/rocket_model.dart';
 import 'package:spacex_graphql/data/models/launch_filter_model.dart';
+import 'package:spacex_graphql/domain/repositories/launch_repository.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_bloc.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_event.dart';
 import 'package:spacex_graphql/presentation/bloc/launch/launch_state.dart';
+import 'package:spacex_graphql/presentation/bloc/analytics/analytics_bloc.dart';
+import 'package:spacex_graphql/presentation/bloc/analytics/analytics_event.dart';
+import 'package:spacex_graphql/presentation/bloc/analytics/analytics_state.dart';
 import 'package:spacex_graphql/presentation/widgets/launch_card.dart';
 import 'package:spacex_graphql/presentation/widgets/loading_view.dart';
 import 'package:spacex_graphql/presentation/screens/launch_details_screen.dart';
+import 'package:spacex_graphql/presentation/screens/analytics_dashboard_screen.dart';
 
 class LaunchListScreen extends StatefulWidget {
   const LaunchListScreen({super.key});
@@ -233,6 +238,48 @@ class _LaunchListScreenState extends State<LaunchListScreen> {
               setState(() {
                 _showFilters = !_showFilters;
               });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.analytics),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    create: (_) => AnalyticsBloc(
+                      context.read<LaunchBloc>().repository,
+                    )..add(const FetchAnalytics()),
+                    child: BlocBuilder<AnalyticsBloc, AnalyticsState>(
+                      builder: (_, state) {
+                        if (state is AnalyticsLoading) {
+                          return const Scaffold(
+                            body: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+
+                        if (state is AnalyticsError) {
+                          return Scaffold(
+                            body: Center(
+                              child: Text(state.message),
+                            ),
+                          );
+                        }
+
+                        if (state is AnalyticsLoaded) {
+                          return AnalyticsDashboardScreen(
+                            analytics: state.analytics,
+                          );
+                        }
+
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ),
+              );
             },
           ),
         ],

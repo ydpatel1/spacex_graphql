@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spacex_graphql/data/models/launch_model.dart';
 import 'package:intl/intl.dart';
 import 'app_network_image.dart';
+import 'countdown_timer.dart';
 
 class LaunchCard extends StatelessWidget {
   final LaunchModel launch;
@@ -15,7 +16,8 @@ class LaunchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('yyyy-MM-dd HH:mm');
+    final dateFormat = DateFormat('MMMM d, yyyy HH:mm');
+    final launchDate = DateTime.parse(launch.launchDateLocal);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -44,13 +46,24 @@ class LaunchCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          launch.missionName,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                launch.missionName,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                            ),
+                            if (launch.upcoming)
+                              CountdownTimer(
+                                launchDate: launchDate,
+                                isUpcoming: launch.upcoming,
+                              ),
+                          ],
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Launch Date: ${launch.launchDateLocal.isNotEmpty ? dateFormat.format(DateTime.parse(launch.launchDateLocal)) : 'Unknown'}',
+                          'Launch Date: ${launch.launchDateLocal.isNotEmpty ? dateFormat.format(launchDate) : 'Unknown'}',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 4),
