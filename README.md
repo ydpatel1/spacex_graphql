@@ -11,8 +11,8 @@ A Flutter application that displays SpaceX launch data using GraphQL API.
 
 ## Prerequisites
 
-- Flutter SDK (version 3.0.0 or higher)
-- Dart SDK (version 2.17.0 or higher)
+- Flutter SDK (version 3.24.0)
+- Dart SDK (version 3.5.0)
 - Android Studio / Xcode for platform-specific development
 - Git
 
